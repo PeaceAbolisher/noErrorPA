@@ -92,6 +92,15 @@ public class Poe {
         return cloneStudent;
     }
 
+    public Student searchStudentOrigin(long num){
+        for(Student s : students){
+            if(s.getStd_number() == num){
+                return s;
+            }
+        }
+        return null;
+    }
+
     public Professor searchProfessor(String email){
         Professor cloneProfessor = null;
         for(Professor p : professors){
@@ -105,6 +114,15 @@ public class Poe {
             }
         }
         return cloneProfessor;
+    }
+
+    public Professor searchProfessorOrigin(String email){
+        for(Professor p : professors){
+            if(p.getEmail().equalsIgnoreCase(email)){
+                return p;
+            }
+        }
+        return null;
     }
 
     public Internship searchInternship(String code){
@@ -122,6 +140,15 @@ public class Poe {
         return cloneInternship;
     }
 
+    public Internship  searchInternshipOrigin(String code){
+        for(Internship i : internships){
+            if(i.getCode().equalsIgnoreCase(code)){
+                return i;
+            }
+        }
+        return null;
+    }
+
     public Project searchProject(String code){
         Project cloneProject = null;
         for(Project p : projects){
@@ -135,6 +162,15 @@ public class Poe {
             }
         }
         return cloneProject;
+    }
+
+    public Project  searchProjectOrigin(String code){
+        for(Project p : projects){
+            if(p.getCode().equalsIgnoreCase(code)){
+                return p;
+            }
+        }
+        return null;
     }
 
     public SelfProposed searchSelfProposed(String code){
@@ -152,6 +188,15 @@ public class Poe {
         return cloneSelfProposed;
     }
 
+    public SelfProposed  searchSelfProposedOrigin(String code){
+        for(SelfProposed sp : selfProposed){
+            if(sp.getCode().equalsIgnoreCase(code)){
+                return sp;
+            }
+        }
+        return null;
+    }
+
     public Application searchApplication(long std_number){
         Application cloneApplication = null;
         for(Application a : applications){
@@ -164,6 +209,15 @@ public class Poe {
             }
         }
         return cloneApplication;
+    }
+
+    public Application searchApplicationOrigin(long std_number){
+        for(Application a : applications){
+            if(a.getStd_number() == std_number){
+               return a;
+                }
+            }
+        return null;
     }
 
     public Assignment searchAssignment(long std_number){

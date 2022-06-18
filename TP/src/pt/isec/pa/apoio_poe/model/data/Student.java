@@ -31,6 +31,8 @@ public class Student extends Entity implements Cloneable {
         return std_number;
     }
 
+    public String getCourse(){ return course;}
+
     public boolean isAble() {
         return able;
     }

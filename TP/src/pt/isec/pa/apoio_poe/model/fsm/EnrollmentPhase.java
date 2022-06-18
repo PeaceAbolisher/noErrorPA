@@ -51,34 +51,8 @@ public class EnrollmentPhase extends PoeStateAdaptor{
         return true;
     }
 
-
-    @Override
-    public boolean addApplicationByFile(String fileName){
-        boolean outcome;
-        List<String> codes = new ArrayList<>();
-        try (FileReader fr = new FileReader(fileName);
-             BufferedReader br = new BufferedReader(fr)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] tokens = line.split(",");
-                for(int i = 1; i < tokens.length; i++){
-                    codes.add(tokens[i]);
-                }
-                outcome = addApplicationByHand(Long.parseLong(tokens[0]), codes);
-                if (!outcome)
-                    return false;
-            }
-        } catch(FileNotFoundException e){
-            System.out.println("File not found");
-        } catch (IOException e){
-            System.out.println("Error opening the file");
-        }
-        changeState(PoeState.ENROLLMENT);
-        return true;
-    }
-
     public boolean addApplicationByHand(long std_number, List<String> codes){
-        Student s = poe.searchStudent(std_number);
+        Student s = poe.searchStudentOrigin(std_number);
         if(s == null)
             return false;
         for(Application a : poe.listApplications())
@@ -93,7 +67,7 @@ public class EnrollmentPhase extends PoeStateAdaptor{
     }
 
     public boolean editApplicationCodes(long std_number, List<String> codes){
-        Application a = poe.searchApplication(std_number);
+        Application a = poe.searchApplicationOrigin(std_number);
         if(a == null)
             return false;
         else{
@@ -106,7 +80,7 @@ public class EnrollmentPhase extends PoeStateAdaptor{
     }
 
     public boolean deleteApplicationData(long std_number){
-        Application a = poe.searchApplication(std_number);
+        Application a = poe.searchApplicationOrigin(std_number);
         if(a == null)
             return false;
         poe.deleteApplicationData(a);

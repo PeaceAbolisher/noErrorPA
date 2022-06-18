@@ -65,18 +65,19 @@ public class ConfigPhase extends PoeStateAdaptor{
 
 
     public boolean editStudentName(long num, String name){
-        Student student = poe.searchStudent(num);
+        Student student = poe.searchStudentOrigin(num);
         if(student ==null){
             return false;
         }else{
             student.setName(name);
             changeState(PoeState.CONFIG);
+            System.out.println("here" + student);
             return  true;
         }
     }
 
     public boolean editStudentArea(long num, String area) {
-        Student student = poe.searchStudent(num);
+        Student student = poe.searchStudentOrigin(num);
         if(student ==null){
             return false;
         }else{
@@ -88,9 +89,11 @@ public class ConfigPhase extends PoeStateAdaptor{
 
     public boolean editStudentCourse(long num, String course){
         boolean outcome;
-        Student student = poe.searchStudent(num);
+        String test;
+        Student student = poe.searchStudentOrigin(num);
+            test = student.getCourse();
             outcome = student.setCourse(course.toUpperCase());
-            if(!outcome){
+            if(!outcome && !(test != course)){
                 return false;
             }else{
                 changeState(PoeState.CONFIG);
@@ -111,12 +114,9 @@ public class ConfigPhase extends PoeStateAdaptor{
 
     public boolean editProfessorName(String email,String name){
         String old_name, new_name;
-        Professor prof = poe.searchProfessor(email);
+        Professor prof = poe.searchProfessorOrigin(email);
         old_name = prof.getName();
-        System.out.println(prof);
-
         new_name =  prof.setName(name);
-        System.out.println(prof);
         if(old_name != new_name){
             changeState(PoeState.CONFIG);
             return true;
@@ -194,7 +194,7 @@ public class ConfigPhase extends PoeStateAdaptor{
 
 
     public boolean editInternshipArea(String code, String[] tokens){
-        Internship i = poe.searchInternship(code);
+        Internship i = poe.searchInternshipOrigin(code);
         if(i == null){
             return false;
         }
@@ -208,7 +208,6 @@ public class ConfigPhase extends PoeStateAdaptor{
         boolean outcome;
         Internship i = poe.searchInternship(code);
         if(i == null) {
-            System.out.println("Internship not found!");
             return false;
         }
         outcome =poe.removeInternship(i);
@@ -221,36 +220,38 @@ public class ConfigPhase extends PoeStateAdaptor{
 
     public boolean deleteProjectData(String code){
         boolean outcome;
-        Project p = poe.searchProject(code);
-        if(p == null) {
-            System.out.println("Internship not found!");
-            return false;
-        }
-        outcome =poe.removeProject(p);
+        outcome = existsProject(code);
         if(!outcome){
             return false;
         }else{
-            return true;
+            Project p = poe.searchProject(code);
+            outcome =poe.removeProject(p);
+            if(!outcome){
+                return false;
+            }else{
+                return true;
+            }
         }
     }
 
     public boolean deleteSelfProposedData(String code){
         boolean outcome;
-        SelfProposed sp = poe.searchSelfProposed(code);
-        if(sp == null) {
-            System.out.println("Internship not found!");
-            return false;
-        }
-        outcome =poe.removeSelfProposed(sp);
+        outcome = existsSelfProposed(code);
         if(!outcome){
             return false;
         }else{
-            return true;
+            SelfProposed sp = poe.searchSelfProposed(code);
+            outcome =poe.removeSelfProposed(sp);
+            if(!outcome){
+                return false;
+            }else{
+                return true;
+            }
         }
     }
 
     public boolean editInternshipHousingEntity(String code, String housing){
-        Internship i = poe.searchInternship(code);
+        Internship i = poe.searchInternshipOrigin(code);
         if(i == null){
             return false;
         }
@@ -259,7 +260,7 @@ public class ConfigPhase extends PoeStateAdaptor{
     }
 
     public boolean editInternshipStd(String code, long numb){
-        Internship i = poe.searchInternship(code);
+        Internship i = poe.searchInternshipOrigin(code);
         if(i == null){
             return false;
         }
@@ -268,7 +269,7 @@ public class ConfigPhase extends PoeStateAdaptor{
     }
 
     public boolean editProjectArea(String code, String[] tokens){
-        Project p = poe.searchProject(code);
+        Project p = poe.searchProjectOrigin(code);
         if(p == null){
             return false;
         }
@@ -279,7 +280,7 @@ public class ConfigPhase extends PoeStateAdaptor{
     }
 
     public boolean editProjectStd(String code, long std_number){
-        Project p = poe.searchProject(code);
+        Project p = poe.searchProjectOrigin(code);
         if(p == null)
             return false;
         p.setStd_number(std_number);
@@ -307,35 +308,6 @@ public class ConfigPhase extends PoeStateAdaptor{
         }
     }
 
-    public boolean addStudentByFile(String fileName) { // TODO: 09/06/2022 fase ta a chamar cenas da UI, big nono!!!
-        boolean outcome;
-        try (FileReader fr = new FileReader(fileName);
-             BufferedReader br = new BufferedReader(fr)) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] tokens = line.split(",");
-                if (Character.isLetter(tokens[0].charAt(0))) {
-                    return false;
-                } else {
-                    outcome = addStudentByHand(Long.parseLong(tokens[0]), tokens[1], tokens[2], tokens[3].toUpperCase(), tokens[4].toUpperCase(), Double.parseDouble(tokens[5]), Boolean.parseBoolean(tokens[6]), false);
-                    if (!outcome) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-                }
-
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found");
-            return false;
-        } catch (IOException e) {
-            System.out.println("Error opening the file");
-            return false;
-        }
-        return true;
-    }
-
     public boolean addSelfProposedByHand(String code, String title, long std_number){
         boolean outcome;
         Student s = poe.searchStudent(std_number);
@@ -353,7 +325,7 @@ public class ConfigPhase extends PoeStateAdaptor{
     public boolean addProjectByHand(String code, String area, String title, String email, long std_number) {
         boolean outcome;
         Student s = poe.searchStudent(std_number);
-        if (s == null) {
+        if (s == null && std_number != -1) {
             return false;
         }
 

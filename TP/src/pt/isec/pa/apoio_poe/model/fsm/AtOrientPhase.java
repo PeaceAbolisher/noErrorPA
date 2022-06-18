@@ -16,7 +16,6 @@ public class AtOrientPhase extends PoeStateAdaptor{
     @Override
     public boolean close_phase() {
         if(!poe.isAtProposalsPhaseClosed()){
-            System.out.println("You have to close Proposals Attribution Phase first!");
             return false;
         }
         poe.setAtOrientPhaseClosed(true);

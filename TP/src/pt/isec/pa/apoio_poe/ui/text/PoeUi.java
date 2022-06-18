@@ -1,5 +1,6 @@
 package pt.isec.pa.apoio_poe.ui.text;
 
+import jdk.swing.interop.SwingInterOpUtils;
 import pt.isec.pa.apoio_poe.model.data.*;
 import pt.isec.pa.apoio_poe.model.fsm.PoeContext;
 import pt.isec.pa.apoio_poe.model.fsm.PoeState;
@@ -88,7 +89,7 @@ public class PoeUi {
                     switch (op) {
                         case 1 -> {
                             fileName = PAInput.readString("File name", true);
-                            fullFileName = "..\\TP\\ficheiros\\" + fileName + ".txt";
+                            fullFileName = "..\\noError\\TP\\ficheiros\\" + fileName + ".txt";
                             try (FileReader fr = new FileReader(fullFileName);
                                  BufferedReader br = new BufferedReader(fr)) {
                                 String line;
@@ -225,7 +226,7 @@ public class PoeUi {
                     } else {
                         do {
                             System.out.println("What do you wish to edit?");
-                            System.out.println(" 1-Name;\n 2-Area;\n 3-Course.");
+                            System.out.println(" 1-Name;\n 2-Area;\n 3-Course;\n 4-Cancel");
                             try {
                                 op = sc.nextInt();
                             } catch (InputMismatchException e) {
@@ -267,13 +268,13 @@ public class PoeUi {
                                     }
                                 }
                                 case 2 -> {
+                                    sc.nextLine();
                                     String area;
                                     op = 0;
                                     System.out.println("Insert the wanted area: ");
                                     area = sc.nextLine();
                                     while (fsm.verifyArea(area)) {
                                         System.out.println("Student: " + std_number);
-                                        System.out.println(area);
                                         System.out.println("Invalid area.");
                                         do {
                                             System.out.println("Do you want to reintroduce area?");
@@ -301,10 +302,11 @@ public class PoeUi {
                                     }
                                 }
                                 case 3 -> {
+                                    sc.nextLine();
                                     String course;
                                     op = 0;
                                     System.out.println("Insert the wanted course: ");
-                                    course = sc.nextLine();
+                                    course = sc.nextLine().toUpperCase();
                                     while (fsm.verifyCourse(course)) {
                                         System.out.println("Student: " + std_number);
                                         System.out.println("Invalid course.");
@@ -332,6 +334,9 @@ public class PoeUi {
                                     } else {
                                         System.out.println("Student's course was edited with success");
                                     }
+                                }
+                                case 4 -> {
+                                    return;
                                 }
                                 default -> System.out.println("Error");
                             }
@@ -385,7 +390,7 @@ public class PoeUi {
         int op = 0;
 
         //student number
-        while (!fsm.verifyStdNumber(std_number)) {
+        while (fsm.verifyStdNumber(std_number)) {
             System.out.println("Student: " + name);
             System.out.println("Student number invalid");
             do {
@@ -570,7 +575,7 @@ public class PoeUi {
                     switch (op) {
                         case 1 -> {
                             fileName = PAInput.readString("File name", true);
-                            fullFileName = "..\\TP\\ficheiros\\" + fileName + ".txt";
+                            fullFileName = "..\\noError\\TP\\ficheiros\\" + fileName + ".txt";
                             try (FileReader fr = new FileReader(fullFileName);
                                  BufferedReader br = new BufferedReader(fr)) {
                                 String line;
@@ -687,9 +692,7 @@ public class PoeUi {
                                     return;
                                 }
                             }
-                            System.out.println(name + "told u so");
                             outcome = fsm.editProfessorName(email, name);
-                            System.out.println(outcome);
                             if (!outcome) {
                                 System.out.println("Professor's data was unsuccessfully edited");
                             } else {
@@ -823,7 +826,7 @@ public class PoeUi {
                     switch (op) {
                         case 1 -> { //read by file
                             fileName = PAInput.readString("File name", true);
-                            fullFileName = "..\\TP\\ficheiros\\" + fileName + ".txt";
+                            fullFileName = "..\\noError\\TP\\ficheiros\\" + fileName + ".txt";
                             try (FileReader fr = new FileReader(fullFileName);
                                  BufferedReader br = new BufferedReader(fr)) {
                                 String line;
@@ -912,13 +915,13 @@ public class PoeUi {
                                         long std_number = 0;
                                         System.out.println("***Internship Info***");
                                         System.out.println("Code: ");
-                                        String code = sc.nextLine();
+                                        String code = sc.next();
                                         System.out.println("Area: ");
-                                        String area = sc.nextLine();
+                                        String area = sc.next();
                                         System.out.println("Title: ");
-                                        String title = sc.nextLine();
+                                        String title = sc.next();
                                         System.out.println("Housing entity: ");
-                                        String housing_entity = sc.nextLine();
+                                        String housing_entity = sc.next();
                                         do {
                                             try {
                                                 System.out.println("Do you want to associate a student?\n (1-yes; 2-no)");
@@ -936,7 +939,7 @@ public class PoeUi {
                                                 std_number = sc.nextLong();
                                             } catch (InputMismatchException e) {
                                                 System.out.println("You must insert a number!");
-                                                sc.nextLine();
+                                                sc.next();
                                             }
                                         }
                                         if (std_number != -1) {
@@ -966,6 +969,7 @@ public class PoeUi {
                                                 }
                                             }
                                         }
+                                        System.out.println(" T1 ON THE BLOCK" + std_number);
                                         outcome = fsm.addInternshipByHand(code.toUpperCase(), area.toUpperCase(), title, housing_entity, std_number);
                                         if (!outcome) {
                                             System.out.println("Internships weren't added successfully");
@@ -1061,6 +1065,7 @@ public class PoeUi {
                                                 sc.nextLine();
                                             }
                                         } while (!outcome);
+                                        System.out.println(" T3 ON THE BLOCK" + std_number);
                                         outcome = fsm.addSelfProposedByHand(code.toUpperCase(), title, std_number);
                                         if (!outcome) {
                                             System.out.println("SelfProposedProjects weren't added successfully");
@@ -1091,9 +1096,9 @@ public class PoeUi {
                                 sc.nextLine();
                                 System.out.println("Insert code from the internship you are looking for: ");
                                 System.out.print("> ");
-                                String code = sc.next();
-
+                                String code = sc.next().toUpperCase();
                                 Internship inter = consultInternship(code);
+                                System.out.println(inter + "wtf");
                                 if (inter == null)
                                     System.out.println("Internship not found");
                                 else
@@ -1103,7 +1108,7 @@ public class PoeUi {
                                 sc.nextLine();
                                 System.out.println("Insert code from the project you are looking for: ");
                                 System.out.print("> ");
-                                String code = sc.next();
+                                String code = sc.next().toUpperCase();
 
                                 Project prog = consultProject(code);
                                 if (prog == null)
@@ -1115,7 +1120,7 @@ public class PoeUi {
                                 sc.nextLine();
                                 System.out.println("Insert code from the self-proposed you are looking for: ");
                                 System.out.print("> ");
-                                String code = sc.next();
+                                String code = sc.next().toUpperCase();
                                 SelfProposed self = consultSelfProposed(code);
                                 if (self == null)
                                     System.out.println("SelfProposed not found");
@@ -1133,7 +1138,7 @@ public class PoeUi {
                     do {
                         System.out.println("What type of POE do you wish to edit?\n(T1-Internship; T2-Project)");
                         System.out.print("> ");
-                        type = sc.next();
+                        type = sc.next().toUpperCase();
                         switch (type) {
                             case "T1" -> {
                                 op = 0;
@@ -1384,9 +1389,11 @@ public class PoeUi {
                 }
                 case 4 -> {
                     do {
+                        sc.nextLine();
                         System.out.println("What type of POE do you wish to delete?\n(T1-Internship; T2-Project; T3-Self-proposed)");
                         System.out.print("> ");
-                        type = sc.nextLine();
+                        type = sc.nextLine().toUpperCase();
+                        System.out.println(type + "here daddy");
                         switch (type) {
                             case "T1" -> {
                                 System.out.println("Insert the code of the internship you want to delete the data from:");
@@ -1466,7 +1473,7 @@ public class PoeUi {
 
         //code
         outcome = fsm.existsInternship(code);
-        while (!outcome) {
+        while (outcome) {
             System.out.println("Internship: " + code);
             System.out.println("That internship is already added");
             do {
@@ -1617,7 +1624,7 @@ public class PoeUi {
 
         //code
         outcome = fsm.existsProject(code);
-        while (!outcome) {
+        while (outcome) {
             System.out.println("Project: " + code);
             System.out.println("That project is already added");
             do {
@@ -1768,7 +1775,7 @@ public class PoeUi {
 
         //code
         outcome = fsm.existsInternship(code);
-        while (!outcome) {
+        while (outcome) {
             System.out.println("Internship: " + code);
             System.out.println("That internship is already added");
             do {
@@ -1912,7 +1919,7 @@ public class PoeUi {
     }
 
     public void manageApplications() {
-        String fileName;
+        String fileName, fullFileName;
         int op = 0;
         boolean outcome;
         do {
@@ -1942,12 +1949,25 @@ public class PoeUi {
                     } while (op > 2 || op < 1);
                     switch (op) {
                         case 1 -> {
+                            List<String> codes = new ArrayList<>();
                             fileName = PAInput.readString("File name", true);
-                            outcome = fsm.addApplicationByFile("..\\TP\\ficheiros\\" + fileName + ".txt");
-                            if (!outcome) {
-                                System.out.println("Application wasn't");
-                            } else {
-                                System.out.println("Application was added");
+                            fullFileName = "..\\noError\\TP\\ficheiros\\" + fileName + ".txt";
+                            try (FileReader fr = new FileReader(fullFileName);
+                                 BufferedReader br = new BufferedReader(fr)) {
+                                String line;
+                                while ((line = br.readLine()) != null) {
+                                    String[] tokens = line.split(",");
+                                    for(int i = 1; i < tokens.length; i++){
+                                        codes.add(tokens[i]);
+                                    }
+                                    outcome = fsm.addApplicationByHand(Long.parseLong(tokens[0]), codes);
+                                    if (!outcome)
+                                        System.out.println("Error adding application by hand");
+                                }
+                            } catch(FileNotFoundException e){
+                                System.out.println("File not found");
+                            } catch (IOException e){
+                                System.out.println("Error opening the file");
                             }
                         }
                         case 2 -> {
@@ -1970,7 +1990,6 @@ public class PoeUi {
                 case 3 -> {
                     op = 0;
                     long num = 0;
-                    sc.nextLine();
                     do {
                         try {
                             System.out.println("Insert the Student's number for which you want to edit the data:");
@@ -2101,7 +2120,6 @@ public class PoeUi {
     public boolean editApplication(long std_number) {
         List<String> codes = new ArrayList<>();
         String code;
-        sc.next();
         do {
             System.out.println("Code: ");
             code = sc.next();

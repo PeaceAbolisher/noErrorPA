@@ -49,8 +49,8 @@ public class PoeContext {
 
 
     //Student
-    public boolean addStudentByHand(long number, String name, String email, String toUpperCase, String toUpperCase1, double grade, boolean able, boolean print) {
-        return state.addStudentByHand(number,name, email,toUpperCase,toUpperCase1,grade,able,print);
+    public boolean addStudentByHand(long number, String name, String email, String area, String course, double grade, boolean able, boolean print) {
+        return state.addStudentByHand(number,name, email,area,course,grade,able,print);
     }
 
     public boolean editStudentName(long std_number, String name) {

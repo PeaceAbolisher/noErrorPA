@@ -24,7 +24,6 @@ public class AtProposalsPhase extends PoeStateAdaptor{
     @Override
     public boolean close_phase() {
         if(!poe.isEnrollmentPhaseClosed()){
-            System.out.println("You have to close Enrollment Phase first!");
             return false;
         }
         poe.setAtProposalsPhaseClosed(true);

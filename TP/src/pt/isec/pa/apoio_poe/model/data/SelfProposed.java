@@ -1,6 +1,6 @@
 package pt.isec.pa.apoio_poe.model.data;
 
-public class SelfProposed {
+public class SelfProposed implements Cloneable{
     protected String code;
     protected String title;
     protected long std_number;

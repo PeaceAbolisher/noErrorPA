@@ -5,7 +5,6 @@ import pt.isec.pa.apoio_poe.model.data.Poe;
 import java.util.Scanner;
 
 public class EnrollmentPhaseBlocked extends PoeStateAdaptor{
-    Scanner sc = new Scanner(System.in);
     public EnrollmentPhaseBlocked(PoeContext context, Poe poe) {
         super(context, poe);
     }
